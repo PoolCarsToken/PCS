@@ -1,0 +1,86 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract PoolCarsToken {
+    string public name = "PoolCars";
+    string public symbol = "POOL";
+    uint8 public decimals = 18;
+    uint256 public totalSupply = 100_000_000_000_000 * 10**uint256(decimals);
+
+    mapping(address => uint256) private _balances;
+    mapping(address => mapping(address => uint256)) private _allowances;
+
+    address public owner;
+    address public marketingWallet;
+    uint256 public marketingFeePercent = 2; // 2%
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Apenas o dono pode executar");
+        _;
+    }
+
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(address indexed owner, address indexed spender, uint256 value);
+
+    constructor(address _marketingWallet) {
+        require(_marketingWallet != address(0), "Endereco invalido");
+        owner = msg.sender;
+        marketingWallet = _marketingWallet;
+        _balances[owner] = totalSupply;
+        emit Transfer(address(0), owner, totalSupply);
+    }
+
+    function balanceOf(address account) public view returns (uint256) {
+        return _balances[account];
+    }
+
+    function transfer(address recipient, uint256 amount) public returns (bool) {
+        _transfer(msg.sender, recipient, amount);
+        return true;
+    }
+
+    function allowance(address ownerAddr, address spender) public view returns (uint256) {
+        return _allowances[ownerAddr][spender];
+    }
+
+    function approve(address spender, uint256 amount) public returns (bool) {
+        _allowances[msg.sender][spender] = amount;
+        emit Approval(msg.sender, spender, amount);
+        return true;
+    }
+
+    function transferFrom(address sender, address recipient, uint256 amount) public returns (bool) {
+        require(_allowances[sender][msg.sender] >= amount, "Sem autorizacao");
+        _allowances[sender][msg.sender] -= amount;
+        _transfer(sender, recipient, amount);
+        return true;
+    }
+
+    function _transfer(address sender, address recipient, uint256 amount) internal {
+        require(_balances[sender] >= amount, "Saldo insuficiente");
+
+        uint256 marketingFee = (amount * marketingFeePercent) / 100;
+        uint256 amountAfterFee = amount - marketingFee;
+
+        _balances[sender] -= amount;
+        _balances[recipient] += amountAfterFee;
+        _balances[marketingWallet] += marketingFee;
+
+        emit Transfer(sender, recipient, amountAfterFee);
+        emit Transfer(sender, marketingWallet, marketingFee);
+    }
+
+    function updateMarketingWallet(address newWallet) public onlyOwner {
+        require(newWallet != address(0), "Endereco invalido");
+        marketingWallet = newWallet;
+    }
+
+    function updateFee(uint256 newFee) public onlyOwner {
+        require(newFee <= 10, "Taxa muito alta");
+        marketingFeePercent = newFee;
+    }
+
+    function renounceOwnership() public onlyOwner {
+        owner = address(0);
+    }
+}
