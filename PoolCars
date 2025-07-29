@@ -1,0 +1,31 @@
+# PoolCars Token (PCS)
+
+PoolCars é um token ERC20 desenvolvido para integrar soluções de mobilidade urbana, transporte coletivo descentralizado e iniciativas sustentáveis.  
+O projeto visa democratizar o acesso ao transporte por meio da blockchain.
+
+## 📋 Informações do Token
+
+- **Nome:** PoolCars Token  
+- **Símbolo:** PCS  
+- **Total Supply:** 100.000.000.000.000 PCS (100 trilhões)  
+- **Padrão:** ERC-20  
+- **Blockchain:** Ethereum  
+- **Contrato:** _Será adicionado após o deploy_
+
+## 🚀 Funcionalidades
+
+- Taxa de marketing em cada transação para financiamento do projeto
+- Transparência total via smart contract
+- Gerenciamento descentralizado do token
+
+## 🔗 Links úteis
+
+- [📄 Whitepaper](#) *(colocar link quando pronto)*
+- [🌐 Site oficial](#) *(colocar link quando disponível)*
+- [🔍 Ver contrato no Etherscan](#) *(link após o deploy)*
+- [💬 Comunidade no Telegram](#) *(opcional)*
+
+## 📄 Licença
+
+Este projeto está licenciado sob a **MIT License**.  
+Você é livre para usar, modificar e distribuir este código, com atribuição apropriada.
